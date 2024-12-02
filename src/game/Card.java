@@ -5,7 +5,7 @@ public class Card {
         value = val;
     }
 
-    private int getValue() {
+    public int getValue() {
         return this.value;
     }
 }
