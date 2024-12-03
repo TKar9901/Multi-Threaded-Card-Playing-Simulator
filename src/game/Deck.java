@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Deck {
-    private ArrayList<Card> cards = new ArrayList<>();
+    ArrayList<Card> cards = new ArrayList<>();
     int name;
 
     public Deck(int id) {
@@ -15,13 +15,13 @@ public class Deck {
     public synchronized void addToDeck(Card c) {
         this.cards.add(c);
     }
-    
-    public String getContent() {
-        String str = "";
+
+    public int[] readDeck() {
+        int[] cardasArray = new int[this.cards.size()];
         for(int i=0; i<this.cards.size(); i++) {
-            str = str + " " + this.cards.get(i).toString();
+            cardasArray[i] = this.cards.get(i).getValue();
         }
-        return str;
+        return cardasArray;
     }
     
 }

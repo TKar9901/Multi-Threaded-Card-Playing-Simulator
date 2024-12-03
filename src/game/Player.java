@@ -72,22 +72,22 @@ public class Player {
                 System.out.println(fs);
                 break;
             case "final":
-                fs = String.format("player %d final hand: %d %d %d %d", this.name, args[0], args[1], args[2], args[3]);
+                fs = String.format("player %d final hand: %d %d %d %d\n", this.name, args[0], args[1], args[2], args[3]);
                 writer.write(fs);
                 System.out.println(fs);
                 break;
             case "win":
-                fs = String.format("player %d wins", this.name);
+                fs = String.format("player %d wins\n", this.name);
                 writer.write(fs);
                 System.out.println(fs);
                 break;
             case "exit":
-                fs = String.format("player %d exits", this.name);
+                fs = String.format("player %d exits\n", this.name);
                 writer.write(fs);
                 System.out.println(fs);
                 break;
             case "informed":
-                fs = String.format("player %d has informed player %d that player %d has won", args[0], this.name, args[0]);
+                fs = String.format("player %d has informed player %d that player %d has won\n", args[0], this.name, args[0]);
                 writer.write(fs);
                 System.out.println(fs);
                 break;
@@ -96,7 +96,19 @@ public class Player {
         } catch(IOException e) {
             System.out.println("Something went wrong");
         }
-        
+          
+    }
+
+    public void deckLog(int[] args) {
+        String fs = "";
+        try {
+            FileWriter writer = new FileWriter(this.deckLog, true);
+            fs = String.format("deck%d contents: %d %d %d %d", this.name, args[0], args[1], args[2], args[3]);
+            writer.write(fs);
+            writer.close();
+        } catch(IOException e) {
+            System.out.println("Something went wrong");
+        }
         
     }
 }

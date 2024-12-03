@@ -41,7 +41,7 @@ public class CardGame {
             players.get(i).log("initial", players.get(i).readHand());
         }
         for(int i=0; i<deckList.size(); i++){
-            for(int j=4*nPlayers+1; j<=8*nPlayers; j+=nPlayers) {
+            for(int j=i+4*nPlayers+1; j<=8*nPlayers-i; j+=nPlayers) {
                 deckList.get(i).addToDeck(pack.get(j));
             }
         }
@@ -91,10 +91,12 @@ public class CardGame {
             }
             player.log("exit", args);
             player.log("final",player.readHand());
+            player.deckLog(player.drawDeck.readDeck());
         }
     }
     public static void main(String[] args) {
-        File dir = new File("\\");
+        File dir = new File(System.getProperty("user.dir"));
+        System.out.println(dir);
         File[] previousLogs = dir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String filename) {
                 return filename.endsWith(".txt");
@@ -142,6 +144,12 @@ public class CardGame {
 
         s.close();
         gameSetup();
+        for(Deck deck : deckList) {
+            int[] items = deck.readDeck();
+            for(int i : items) {
+                System.out.print(i);
+            }
+        }
         
         for(int i=0; i<nPlayers; i++) {
             PlayerThread thread = new PlayerThread(players.get(i));

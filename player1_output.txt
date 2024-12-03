@@ -1,1 +1,25 @@
-player 1 intial hand: 1 2 2 2player 1 draws a 2 from deck 1player 1 discards 1 to deck 2player 1 current hand: 2 2 2 2player 1 winsplayer 1 exitsplayer 1 final hand: 2 2 2 2
+player 1 intial hand: 3 2 6 6
+player 1 draws a 7 from deck 1
+player 1 discards 6 to deck 2
+player 1 current hand: 3 2 6 7
+player 1 draws a 3 from deck 1
+player 1 discards 3 to deck 2
+player 1 current hand: 2 6 7 3
+player 1 draws a 3 from deck 1
+player 1 discards 3 to deck 2
+player 1 current hand: 2 6 7 3
+player 1 draws a 6 from deck 1
+player 1 discards 6 to deck 2
+player 1 current hand: 2 6 7 3
+player 1 draws a 6 from deck 1
+player 1 discards 7 to deck 2
+player 1 current hand: 2 6 3 6
+player 1 draws a 6 from deck 1
+player 1 discards 3 to deck 2
+player 1 current hand: 2 6 6 6
+player 1 draws a 7 from deck 1
+player 1 discards 7 to deck 2
+player 1 current hand: 2 6 6 6
+player 2 has informed player 1 that player 2 has won
+player 1 exits
+player 1 final hand: 2 6 6 6
