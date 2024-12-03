@@ -1,0 +1,1 @@
+player 0 intial hand: 1 1 2 2player 0 draws a 2 from deck 0player 0 discards 2 to deck 1player 0 current hand: 1 1 2 2player 1 has informed player 0 that player 1 has wonplayer 0 exitsplayer 0 final hand: 1 1 2 2

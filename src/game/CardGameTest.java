@@ -21,6 +21,8 @@ public class CardGameTest {
         assertFalse(CardGame.packValidity(notEnoughUniques, 17));
         ArrayList<Integer> incorrectFrequency = new ArrayList<Integer>(Arrays.asList(1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2));
         assertFalse(CardGame.packValidity(incorrectFrequency, 2));
+        ArrayList<Integer> hasNegative = new ArrayList<Integer>(Arrays.asList(1,1,1,-2,2,2,2,2,2,2,2,2,2,2,2,2));
+        assertTrue(CardGame.packValidity(hasNegative, 2));
         ArrayList<Integer> correct = new ArrayList<Integer>(Arrays.asList(1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2));
         assertTrue(CardGame.packValidity(correct, 2));
     }

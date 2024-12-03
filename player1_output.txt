@@ -1,0 +1,1 @@
+player 1 intial hand: 1 2 2 2player 1 draws a 2 from deck 1player 1 discards 1 to deck 2player 1 current hand: 2 2 2 2player 1 winsplayer 1 exitsplayer 1 final hand: 2 2 2 2

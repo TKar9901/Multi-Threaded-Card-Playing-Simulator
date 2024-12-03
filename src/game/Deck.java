@@ -8,11 +8,11 @@ public class Deck {
         name = id;
     }
 
-    public Card drawFromDeck() {
+    public synchronized Card drawFromDeck() {
         return this.cards.get(this.cards.size() - 1);
     }
 
-    public void addToDeck(Card c) {
+    public synchronized void addToDeck(Card c) {
         this.cards.add(c);
     }
     
@@ -23,8 +23,5 @@ public class Deck {
         }
         return str;
     }
-
-    public void addCard(Card card) {
-        this.cards.add(card);
-    }
+    
 }

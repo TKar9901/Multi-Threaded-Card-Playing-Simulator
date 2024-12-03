@@ -1,8 +1,4 @@
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerThread extends Thread {
 
@@ -14,36 +10,59 @@ public class PlayerThread extends Thread {
     }
 
     public void run() {
-        while(!this.won) {
-
-            Card drawnCard = player.drawDeck.drawFromDeck();
-            player.addToHand(drawnCard);
-            int[] args = {drawnCard.getValue(), player.drawDeck.name};
-            player.log("draw", args);
-
-            Random rand = new Random();
-            int index;
-            while(true) {
-                index = rand.nextInt(5);
-                if(player.hand.get(index).getValue() != player.denomination) {
-                    break;
+    
+        try {
+            while(!this.won) {
+                if(checkHandState()) {
+                    won = true;
+                    CardGame.gameEnd(player);
                 }
+                Thread.sleep(300);
+                drawCard();
+                discardCard();
+                readCurrentHand();
             }
             
-            Card discardedCard = player.hand.get(index);
-            player.removeFromHand(discardedCard);
-            int[] args2 = {discardedCard.getValue(), player.discardDeck.name};
-            player.log("discard", args2);
-            player.discardDeck.addToDeck(discardedCard);
+        } catch(InterruptedException e) {
+            
+        }
+        
+    }
 
-            int[] args3 = player.readHand();
-            player.log("current", args3);
+    private void drawCard() {
+        Card drawnCard = player.drawDeck.drawFromDeck();
+        player.addToHand(drawnCard);
+        int[] args = {drawnCard.getValue(), player.drawDeck.name};
+        player.log("draw", args);
+    }
 
-            Set<Card> set = new HashSet<Card>(this.player.hand);
-            if(set.size() == 1) {
-                won = true;
+    private void discardCard() {
+        Card discardedCard = player.hand.get(getRandomIndex());
+        player.removeFromHand(discardedCard);
+        int[] args2 = {discardedCard.getValue(), player.discardDeck.name};
+        player.log("discard", args2);
+        player.discardDeck.addToDeck(discardedCard);
+    }
+
+    private void readCurrentHand() {
+        int[] args3 = player.readHand();
+        player.log("current", args3);
+    }
+
+    private int getRandomIndex() {
+        ThreadLocalRandom rand = ThreadLocalRandom.current();
+        int index;
+        while(true) {
+            index = rand.nextInt(player.hand.size());
+            if(player.hand.get(index).getValue() != player.denomination) {
+                break;
             }
         }
+        return index;
+    }
 
+    private boolean checkHandState() {
+        int firstCardValue = player.hand.get(0).getValue();
+        return player.hand.stream().allMatch(card -> card.getValue() == firstCardValue);
     }
 }
