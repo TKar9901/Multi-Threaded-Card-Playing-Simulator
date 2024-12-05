@@ -1,7 +1,0 @@
-{
-    "java.project.sourcePaths": ["src/game"],
-    "java.project.outputPath": "bin",
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar"
-    ]
-}

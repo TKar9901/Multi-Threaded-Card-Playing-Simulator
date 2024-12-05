@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/Multi-Threaded-Card-Playing-Simulator.iml
+/.idea/

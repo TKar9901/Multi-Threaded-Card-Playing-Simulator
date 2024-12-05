@@ -62,7 +62,7 @@ public class PlayerThread extends Thread {
     }
 
     private boolean checkHandState() {
-        int firstCardValue = player.hand.get(0).getValue();
+        int firstCardValue = player.hand.getFirst().getValue();
         return player.hand.stream().allMatch(card -> card.getValue() == firstCardValue);
     }
 }

@@ -16,6 +16,10 @@ public class Deck {
         this.cards.add(c);
     }
 
+    public ArrayList<Card> getCards() {
+        return this.cards;
+    }
+
     public int[] readDeck() {
         int[] cardasArray = new int[this.cards.size()];
         for(int i=0; i<this.cards.size(); i++) {

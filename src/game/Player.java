@@ -79,7 +79,6 @@ public class Player {
             case "win":
                 fs = String.format("player %d wins\n", this.name);
                 writer.write(fs);
-                System.out.println(fs);
                 break;
             case "exit":
                 fs = String.format("player %d exits\n", this.name);

@@ -1,25 +1,72 @@
 player 1 intial hand: 3 2 6 6
 player 1 draws a 7 from deck 1
-player 1 discards 6 to deck 2
-player 1 current hand: 3 2 6 7
-player 1 draws a 3 from deck 1
 player 1 discards 3 to deck 2
-player 1 current hand: 2 6 7 3
-player 1 draws a 3 from deck 1
-player 1 discards 3 to deck 2
-player 1 current hand: 2 6 7 3
+player 1 current hand: 2 6 6 7
 player 1 draws a 6 from deck 1
 player 1 discards 6 to deck 2
+player 1 current hand: 2 6 7 6
+player 1 draws a 3 from deck 1
+player 1 discards 6 to deck 2
 player 1 current hand: 2 6 7 3
+player 1 draws a 3 from deck 1
+player 1 discards 6 to deck 2
+player 1 current hand: 2 7 3 3
 player 1 draws a 6 from deck 1
 player 1 discards 7 to deck 2
-player 1 current hand: 2 6 3 6
-player 1 draws a 6 from deck 1
+player 1 current hand: 2 3 3 6
+player 1 draws a 2 from deck 1
 player 1 discards 3 to deck 2
-player 1 current hand: 2 6 6 6
+player 1 current hand: 2 3 6 2
+player 1 draws a 7 from deck 1
+player 1 discards 6 to deck 2
+player 1 current hand: 2 3 2 7
+player 1 draws a 6 from deck 1
+player 1 discards 6 to deck 2
+player 1 current hand: 2 3 2 7
+player 1 draws a 6 from deck 1
+player 1 discards 6 to deck 2
+player 1 current hand: 2 3 2 7
+player 1 draws a 6 from deck 1
+player 1 discards 7 to deck 2
+player 1 current hand: 2 3 2 6
+player 1 draws a 6 from deck 1
+player 1 discards 6 to deck 2
+player 1 current hand: 2 3 2 6
+player 1 draws a 6 from deck 1
+player 1 discards 6 to deck 2
+player 1 current hand: 2 3 2 6
 player 1 draws a 7 from deck 1
 player 1 discards 7 to deck 2
-player 1 current hand: 2 6 6 6
+player 1 current hand: 2 3 2 6
+player 1 draws a 7 from deck 1
+player 1 discards 3 to deck 2
+player 1 current hand: 2 2 6 7
+player 1 draws a 6 from deck 1
+player 1 discards 6 to deck 2
+player 1 current hand: 2 2 6 7
 player 2 has informed player 1 that player 2 has won
 player 1 exits
-player 1 final hand: 2 6 6 6
+player 1 final hand: 2 2 6 7
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
+player 1 intial hand: 1 1 2 2
