@@ -3,10 +3,23 @@ import org.junit.Test;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.junit.Before;
+import org.junit.After;
 
 import static org.junit.Assert.*;
 
 public class CardGameTest {
+    MockCardGame game = new MockCardGame();
+
+    @Before
+    public void setUp() throws Exception {
+        MockCardGame.resetStaticState();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        MockCardGame.resetStaticState();
+    }
 
     private Method getPackValidityMethod() throws NoSuchMethodException {
         Method method = CardGame.class.getDeclaredMethod("packValidity");
@@ -47,7 +60,6 @@ public class CardGameTest {
     //Tests all functionality of the packValidity function
     @Test 
     public void packValidityTest() throws Exception {
-        MockCardGame game = new MockCardGame();
         Method packValidity = getPackValidityMethod();
 
         game.setPlayers(2);
@@ -77,18 +89,15 @@ public class CardGameTest {
     @Test
     public void createCardsTest() throws Exception {
         MockCardGame game = new MockCardGame();
-        System.out.println(game.getPackList().size());
         Method createCards = getCreateCards();
         game.setPackList(new ArrayList<>(Arrays.asList(1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)));
         createCards.invoke(null);
         assertEquals(16, game.getPack().size());
-        System.out.println(game.getDeckList().size());
     }
 
     //Tests to see if the correct number of decks are being corrected
     @Test
     public void createDeckTest() throws Exception {
-        MockCardGame game = new MockCardGame();
         System.out.println(game.getDeckList().size());
         Method createDecks = getCreateDeck();
         game.setPlayers(5);
@@ -101,7 +110,6 @@ public class CardGameTest {
      */
     @Test
     public void createPlayersTest() throws Exception {
-        MockCardGame game = new MockCardGame();
         Method createPlayers = getCreatePlayers();
         Method createDecks = getCreateDeck();
         game.setPlayers(5);
@@ -124,7 +132,6 @@ public class CardGameTest {
 
     @Test
     public void dealCardsTest() throws Exception {
-        MockCardGame game = new MockCardGame();
         Method dealCards = getDealCards();
         Method createCards = getCreateCards();
         Method createDecks = getCreateDeck();
@@ -149,7 +156,6 @@ public class CardGameTest {
 
     @Test
     public void setPreferredTest() throws Exception {
-        MockCardGame game = new MockCardGame();
         Method setPreferred = getSetPreferred();
         Method createCards = getCreateCards();
         Method createDecks = getCreateDeck();

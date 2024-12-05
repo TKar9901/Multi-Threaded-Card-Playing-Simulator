@@ -28,4 +28,13 @@ public class MockCardGame extends CardGame{
         return players;
     }
 
+    public static void resetStaticState() {
+        players.clear();
+        deckList.clear();
+        nPlayers = 0;
+        packList.clear();
+        pack.clear();
+        playerThreads.clear();
+    }
+
 }

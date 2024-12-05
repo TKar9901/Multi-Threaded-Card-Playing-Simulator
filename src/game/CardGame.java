@@ -24,12 +24,10 @@ public class CardGame {
 
         Set<Integer> set = new HashSet<Integer>(packList);
         if(set.size() < nPlayers) {
-            System.out.println("Second");
             return false;
         }
         for(int i : set) {
             if(Collections.frequency(packList, i) < 4) {
-                System.out.println("Third");
                 return false;
             }
             if(i < 0) {

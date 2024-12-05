@@ -2,30 +2,24 @@ player 2 intial hand: 2 3 6 1
 player 2 draws a 7 from deck 2
 player 2 discards 2 to deck 0
 player 2 current hand: 3 6 1 7
+player 2 draws a 6 from deck 2
+player 2 discards 6 to deck 0
+player 2 current hand: 3 6 1 7
 player 2 draws a 3 from deck 2
 player 2 discards 1 to deck 0
 player 2 current hand: 3 6 7 3
 player 2 draws a 6 from deck 2
 player 2 discards 6 to deck 0
-player 2 current hand: 3 7 3 6
+player 2 current hand: 3 6 7 3
+player 2 draws a 6 from deck 2
+player 2 discards 6 to deck 0
+player 2 current hand: 3 6 7 3
 player 2 draws a 6 from deck 2
 player 2 discards 6 to deck 0
 player 2 current hand: 3 7 3 6
-player 2 draws a 6 from deck 2
-player 2 discards 7 to deck 0
-player 2 current hand: 3 3 6 6
-player 2 draws a 7 from deck 2
-player 2 discards 6 to deck 0
-player 2 current hand: 3 3 6 7
 player 2 draws a 3 from deck 2
-player 2 discards 6 to deck 0
-player 2 current hand: 3 3 7 3
-player 2 draws a 6 from deck 2
-player 2 discards 6 to deck 0
-player 2 current hand: 3 3 7 3
-player 2 draws a 6 from deck 2
 player 2 discards 7 to deck 0
-player 2 current hand: 3 3 3 6
+player 2 current hand: 3 3 6 3
 player 2 draws a 6 from deck 2
 player 2 discards 6 to deck 0
 player 2 current hand: 3 3 3 6
@@ -39,7 +33,34 @@ player 2 draws a 6 from deck 2
 player 2 discards 6 to deck 0
 player 2 current hand: 3 3 3 6
 player 2 draws a 7 from deck 2
+player 2 discards 6 to deck 0
+player 2 current hand: 3 3 3 7
+player 2 draws a 6 from deck 2
 player 2 discards 7 to deck 0
+player 2 current hand: 3 3 3 6
+player 2 draws a 6 from deck 2
+player 2 discards 6 to deck 0
+player 2 current hand: 3 3 3 6
+player 2 draws a 6 from deck 2
+player 2 discards 6 to deck 0
+player 2 current hand: 3 3 3 6
+player 2 draws a 6 from deck 2
+player 2 discards 6 to deck 0
+player 2 current hand: 3 3 3 6
+player 2 draws a 7 from deck 2
+player 2 discards 6 to deck 0
+player 2 current hand: 3 3 3 7
+player 2 draws a 6 from deck 2
+player 2 discards 7 to deck 0
+player 2 current hand: 3 3 3 6
+player 2 draws a 7 from deck 2
+player 2 discards 7 to deck 0
+player 2 current hand: 3 3 3 6
+player 2 draws a 6 from deck 2
+player 2 discards 6 to deck 0
+player 2 current hand: 3 3 3 6
+player 2 draws a 6 from deck 2
+player 2 discards 6 to deck 0
 player 2 current hand: 3 3 3 6
 player 2 draws a 3 from deck 2
 player 2 discards 6 to deck 0
