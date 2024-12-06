@@ -1,8 +1,9 @@
+import java.sql.SQLOutput;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerThread extends Thread {
 
-    private final Player player;
+    protected final Player player;
     private Boolean won = false;
 
     public PlayerThread(Player player) {
@@ -30,7 +31,7 @@ public class PlayerThread extends Thread {
         
     }
 
-    private void drawCard() {
+    protected void drawCard() {
         Card drawnCard = player.drawDeck.drawFromDeck();
         player.addToHand(drawnCard);
         //updatePreference(drawnCard);
@@ -38,7 +39,7 @@ public class PlayerThread extends Thread {
         Logger.logDraw(player, args);
     }
 
-    private void discardCard() {
+    protected void discardCard() {
         Card discardedCard = player.hand.get(getRandomIndex());
         player.removeFromHand(discardedCard);
         player.discardDeck.addToDeck(discardedCard);
@@ -46,23 +47,12 @@ public class PlayerThread extends Thread {
         Logger.logDiscard(player, args);
     }
 
-    private void readCurrentHand() {
+    protected void readCurrentHand() {
         int[] args = player.readHand();
         Logger.logCurrent(player, args);
     }
 
-    /*
-    private void updatePreference(Card c) {
-        ArrayList<Integer> cardValues = new ArrayList();
-        for(Card card : player.hand) {
-            cardValues.add(card.getValue());
-        }
-        if(Collections.frequency(cardValues, c.getValue()) == 3) {
-            player.setDenomination(c.getValue());
-        }
-    } */
-
-    private int getRandomIndex() {
+    protected int getRandomIndex() {
         ThreadLocalRandom rand = ThreadLocalRandom.current();
         int index;
         while(true) {
@@ -74,7 +64,7 @@ public class PlayerThread extends Thread {
         return index;
     }
 
-    private boolean checkHandState() {
+    protected boolean checkHandState() {
         int firstCardValue = player.hand.getFirst().getValue();
         return player.hand.stream().allMatch(card -> card.getValue() == firstCardValue);
     }

@@ -3,7 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Logger {
-    private static final String path = System.getProperty("user.dir") + File.separator + "logs"
+    protected static final String path = System.getProperty("user.dir") + File.separator + "logs"
             + File.separator;
 
     public static File createPlayerLog(Player player) {
@@ -32,7 +32,7 @@ public class Logger {
     public static void logDiscard(Player player, int[] args) {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
-            String fs = String.format("player %d discards %d to deck %d\n",
+            String fs = String.format("player %d discards a %d to deck %d\n",
                     player.name, args[0], args[1]);
             writer.write(fs);
             writer.close();
