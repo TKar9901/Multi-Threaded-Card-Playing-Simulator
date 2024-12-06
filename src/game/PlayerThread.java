@@ -15,7 +15,8 @@ public class PlayerThread extends Thread {
             while(!this.won) {
                 if(checkHandState()) {
                     won = true;
-                    CardGame.gameEnd(player);
+                    CardGame.closeThreads();
+                    CardGame.finalLogs(player);
                 }
                 Thread.sleep(300);
                 drawCard();
@@ -33,20 +34,20 @@ public class PlayerThread extends Thread {
         Card drawnCard = player.drawDeck.drawFromDeck();
         player.addToHand(drawnCard);
         int[] args = {drawnCard.getValue(), player.drawDeck.name};
-        player.log("draw", args);
+        Logger.logDraw(player, args);
     }
 
     private void discardCard() {
         Card discardedCard = player.hand.get(getRandomIndex());
         player.removeFromHand(discardedCard);
-        int[] args2 = {discardedCard.getValue(), player.discardDeck.name};
-        player.log("discard", args2);
+        int[] args = {discardedCard.getValue(), player.discardDeck.name};
+        Logger.logDiscard(player, args);
         player.discardDeck.addToDeck(discardedCard);
     }
 
     private void readCurrentHand() {
-        int[] args3 = player.readHand();
-        player.log("current", args3);
+        int[] args = player.readHand();
+        Logger.logCurrent(player, args);
     }
 
     private int getRandomIndex() {

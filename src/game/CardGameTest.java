@@ -1,8 +1,8 @@
 import org.junit.Test;
-
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.After;
 
@@ -21,7 +21,7 @@ public class CardGameTest {
         MockCardGame.resetStaticState();
     }
 
-    private Method getPackValidityMethod() throws NoSuchMethodException {
+    private Method getPackValidity() throws NoSuchMethodException {
         Method method = CardGame.class.getDeclaredMethod("packValidity");
         method.setAccessible(true);
         return method;
@@ -57,10 +57,29 @@ public class CardGameTest {
         return method;
     }
 
+    private Method getStartThreads() throws NoSuchMethodException {
+        Method method = CardGame.class.getDeclaredMethod("startThreads");
+        method.setAccessible(true);
+        return method;
+
+    }
+
+    private Method getCloseThreads() throws NoSuchMethodException {
+        Method method = CardGame.class.getDeclaredMethod("closeThreads");
+        method.setAccessible(true);
+        return method;
+    }
+
+    private Method getGetNumberOfPlayers() throws NoSuchMethodException {
+        Method method = CardGame.class.getDeclaredMethod("getNumberOfPlayers");
+        method.setAccessible(true);
+        return method;
+    }
+
     //Tests all functionality of the packValidity function
     @Test 
     public void packValidityTest() throws Exception {
-        Method packValidity = getPackValidityMethod();
+        Method packValidity = getPackValidity();
 
         game.setPlayers(2);
         game.setPackList(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7)));
@@ -95,10 +114,9 @@ public class CardGameTest {
         assertEquals(16, game.getPack().size());
     }
 
-    //Tests to see if the correct number of decks are being corrected
+    //Tests to see if the correct number of decks are being created
     @Test
     public void createDeckTest() throws Exception {
-        System.out.println(game.getDeckList().size());
         Method createDecks = getCreateDeck();
         game.setPlayers(5);
         createDecks.invoke(null);
@@ -172,6 +190,48 @@ public class CardGameTest {
         assertEquals(4, game.getPlayers().get(1).denomination);
     }
 
+    //Tests that the threads start correctly
+    @Test
+    public void startThreadsTest() throws Exception {
+        Method startThreads = getStartThreads();
+        Method dealCards = getDealCards();
+        Method setPreferred = getSetPreferred();
+        Method createCards = getCreateCards();
+        Method createDecks = getCreateDeck();
+        Method createPlayers = getCreatePlayers();
+        game.setPlayers(2);
+        game.setPackList(new ArrayList<>(Arrays.asList(4, 4, 4, 4, 5, 5, 5, 5, 7, 7, 7, 7, 2, 2, 2, 2)));
+        createCards.invoke(null);
+        createDecks.invoke(null);
+        createPlayers.invoke(null);
+        setPreferred.invoke(null);
+        dealCards.invoke(null);
+        startThreads.invoke(null);
+        assertEquals(true, game.getPlayerThreads().get(0).isAlive());
+        assertEquals(true, game.getPlayerThreads().get(1).isAlive());
+    }
 
+    //Test that the threads close correctly
+    @Test
+    public void closeThreadsTest() throws Exception {
+        Method closeThreads = getCloseThreads();
+        Method startThreads = getStartThreads();
+        Method dealCards = getDealCards();
+        Method setPreferred = getSetPreferred();
+        Method createCards = getCreateCards();
+        Method createDecks = getCreateDeck();
+        Method createPlayers = getCreatePlayers();
+        game.setPlayers(2);
+        game.setPackList(new ArrayList<>(Arrays.asList(4, 4, 4, 4, 5, 5, 5, 5, 7, 7, 7, 7, 2, 2, 2, 2)));
+        createCards.invoke(null);
+        createDecks.invoke(null);
+        createPlayers.invoke(null);
+        setPreferred.invoke(null);
+        dealCards.invoke(null);
+        startThreads.invoke(null);
+        closeThreads.invoke(null);
+        assertEquals(true, game.getPlayerThreads().get(0).isInterrupted());
+        assertEquals(true, game.getPlayerThreads().get(1).isInterrupted());
+    }
    
 }

@@ -1,15 +1,23 @@
 import java.util.ArrayList;
+import java.io.File;
 
 public class Deck {
     ArrayList<Card> cards = new ArrayList<>();
+    File deckLog;
     int name;
 
     public Deck(int id) {
         name = id;
+        createDeckLog();
+    }
+
+    private void createDeckLog() {
+        String fs = String.format("deck%d_output.txt", this.name);
+        this.deckLog = new File(fs);
     }
 
     public synchronized Card drawFromDeck() {
-        return this.cards.get(this.cards.size() - 1);
+        return this.cards.getFirst();
     }
 
     public synchronized void addToDeck(Card c) {
@@ -21,11 +29,11 @@ public class Deck {
     }
 
     public int[] readDeck() {
-        int[] cardasArray = new int[this.cards.size()];
+        int[] cardAsArray = new int[this.cards.size()];
         for(int i=0; i<this.cards.size(); i++) {
-            cardasArray[i] = this.cards.get(i).getValue();
+            cardAsArray[i] = this.cards.get(i).getValue();
         }
-        return cardasArray;
+        return cardAsArray;
     }
     
 }

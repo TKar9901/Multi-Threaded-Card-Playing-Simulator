@@ -1,7 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 public class MockCardGame extends CardGame{
 
@@ -10,6 +7,10 @@ public class MockCardGame extends CardGame{
     }
     public void setPackList(ArrayList<Integer> n) {
         CardGame.packList = n;
+    }
+    public void setPlayerThreads() {
+        playerThreads.add(new PlayerThread(players.get(0)));
+        playerThreads.add(new PlayerThread(players.get(1)));
     }
 
     public ArrayList<Integer> getPackList() {
@@ -26,6 +27,10 @@ public class MockCardGame extends CardGame{
 
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    public ArrayList<PlayerThread> getPlayerThreads() {
+        return playerThreads;
     }
 
     public static void resetStaticState() {

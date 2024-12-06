@@ -1,20 +1,58 @@
-import java.util.Scanner;
+import java.util.*;
 import java.io.FileNotFoundException;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
 import java.io.File;
-import java.io.FilenameFilter;
 
 public class CardGame {
     protected static int nPlayers;
-    protected static String packLocation;
     protected static ArrayList<Integer> packList = new ArrayList<>();
     protected static ArrayList<Player> players = new ArrayList<>();
     protected static ArrayList<PlayerThread> playerThreads = new ArrayList<>();
     protected static ArrayList<Card> pack = new ArrayList<>();
     protected static ArrayList<Deck> deckList = new ArrayList<>();
+
+    protected static void getNumberOfPlayers(Scanner userInput) {
+        int numPlayers;
+        while (true) {
+            System.out.println("Number of players");
+            try {
+                nPlayers = Integer.parseInt(userInput.nextLine());
+                if (nPlayers > 1) {
+                    break;
+                }
+                System.out.println("Invalid player number, ensure at least two players.");
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, please enter a number");
+            }
+        }
+    }
+
+    private static void loadPack(Scanner userInput) throws InvalidFormatException {
+        while (true) {
+            System.out.println("Please enter pack file name");
+            try {
+                String packName = userInput.nextLine();
+                File packFile = new File(System.getProperty("user.dir") + File.separator + "src"
+                        + File.separator + "game" + File.separator + packName + ".txt");
+                Scanner packScanner = new Scanner(packFile);
+                while (packScanner.hasNextLine()) {
+                    String data = packScanner.nextLine();
+                    try {
+                        packList.add(Integer.parseInt(data));
+                    } catch (NumberFormatException e) {
+                        throw new InvalidFormatException("Pack format invalid, please fix and run again");
+                    }
+                }
+                packScanner.close();
+                if (!packValidity()) {
+                    throw new InvalidFormatException("Pack format invalid, please fix and run again");
+                } else {
+                    break;
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("File could not be found, ensure it is in the current directory");
+            }
+        }
+    }
 
     protected static boolean packValidity() {
 
@@ -69,7 +107,7 @@ public class CardGame {
             for(int j=i; j<(4*nPlayers)+i; j+=nPlayers) {
                 players.get(i).addToHand(pack.get(j));
             }
-            players.get(i).log("initial", players.get(i).readHand());
+            Logger.logInitial(players.get(i), players.get(i).readHand());
         }
         for(int i=0; i<deckList.size(); i++){
             for(int j=i+4*nPlayers; j<8*nPlayers; j+=nPlayers) {
@@ -86,90 +124,63 @@ public class CardGame {
         }
     }
 
-    public static void gameEnd(Player winner) throws InterruptedException {
+    protected static void startThreads() {
+        for(Player player : players) {
+            PlayerThread thread = new PlayerThread(player);
+            playerThreads.add(thread);
+            thread.start();
+        }
+    }
+
+    protected static void closeThreads() {
         for(PlayerThread thread : playerThreads) {
             thread.interrupt();
         }
+    }
+
+    protected static void finalLogs(Player winner) {
         for(Player player : players) {
-            int[] args = {};
             if(player==winner) {
-                player.log("win", args);
-                String fs = String.format("Player %d wins", winner.name);
-                System.out.println(fs);
+                Logger.logWin(winner);
             } else {
-                int[] args2 = {winner.name};
-                player.log("informed", args2);
+                int[] args = {winner.name};
+                Logger.logInformed(player, args);
             }
-            player.log("exit", args);
-            player.log("final",player.readHand());
-            player.deckLog(player.drawDeck.readDeck());
+            Logger.logExit(player);
+            Logger.logFinal(player, player.readHand());
+            Logger.logDeck(player.drawDeck);
         }
     }
+
+    protected static void removeLogs() {
+        File currentDirectory = new File(System.getProperty("user.dir"));
+        File[] logFiles = getLogFiles(currentDirectory);
+        for (File logFile : logFiles) {
+            logFile.delete();
+        }
+    }
+
+    protected static File[] getLogFiles(File directory) {
+        return directory.listFiles((dir, filename) -> filename.endsWith(".txt"));
+    }
+
     public static void main(String[] args) {
-        File dir = new File(System.getProperty("user.dir"));
-        System.out.println(dir);
-        File[] previousLogs = dir.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String filename) {
-                return filename.endsWith(".txt");
-            }
-        });
-        for(File file : previousLogs) {
-            file.delete();
+
+        getNumberOfPlayers(new Scanner(System.in));
+        try {
+            loadPack(new Scanner(System.in));
+        } catch(InvalidFormatException e) {
+            System.out.println(e.getMessage());
         }
 
-        Scanner s = new Scanner(System.in);
-
-        while(true) {
-            System.out.println("Player number");
-            nPlayers = Integer.parseInt(s.nextLine());
-            if(nPlayers > 1) {
-                break;
-            }
-            System.out.println("Invalid player number, ensure atleast two players."); 
-        }
-
-        while(true) {
-            System.out.println("Please enter pack file name");
-            String packName = s.nextLine();
-            try {
-                File packFile = new File("src\\game\\"+packName+".txt");
-                Scanner packScanner = new Scanner(packFile);
-                while (packScanner.hasNextLine()) {
-                    String data = packScanner.nextLine();
-                    try {
-                        packList.add(Integer.parseInt(data));
-                    } catch (NumberFormatException e) {
-                        throw new InvalidFormatException("Pack format invalid, please fix and run again");
-                    }
-
-                }
-                packScanner.close();
-                if(packValidity()) {
-                    break;
-                } else {
-                    throw new InvalidFormatException("Pack format invalid, please fix and run again"); 
-                } 
-            } catch (FileNotFoundException e) {
-                System.out.println("File could not be found, ensure it is in the current directory");
-            } catch (InvalidFormatException e) {
-                System.out.println(e.getMessage());
-            }
-           
-        }
-
-        s.close();
+        removeLogs();
         packValidity();
         createCards();
         createDeck();
         createPlayers();
         dealCards();
         setPreferred();
-        
-        for(int i=0; i<nPlayers; i++) {
-            PlayerThread thread = new PlayerThread(players.get(i));
-            playerThreads.add(thread);
-            thread.start();
-        }
+        startThreads();
 
     }
 }

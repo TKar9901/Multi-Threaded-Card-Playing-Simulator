@@ -398,3 +398,6 @@ FodyWeavers.xsd
 *.sln.iml
 /Multi-Threaded-Card-Playing-Simulator.iml
 /.idea/
+
+# Output files
+./src/game/*output.txt
