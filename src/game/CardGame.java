@@ -11,7 +11,6 @@ public class CardGame {
     protected static ArrayList<Deck> deckList = new ArrayList<>();
 
     protected static void getNumberOfPlayers(Scanner userInput) {
-        int numPlayers;
         while (true) {
             System.out.println("Number of players");
             try {
@@ -26,7 +25,15 @@ public class CardGame {
         }
     }
 
-    private static void loadPack(Scanner userInput) throws InvalidFormatException {
+    protected static void makeLogDir() {
+        File logDir = new File(System.getProperty("user.dir") + File.separator + "logs");
+        if (!logDir.exists()) {
+            logDir.mkdir();
+        }
+    }
+
+    protected static void loadPack(Scanner userInput) throws InvalidFormatException {
+        makeLogDir();
         while (true) {
             System.out.println("Please enter pack file name");
             try {
@@ -56,23 +63,11 @@ public class CardGame {
 
     protected static boolean packValidity() {
 
+        //Checks the correct number of cards in the pack
         if(packList.size() != 8 * nPlayers) {
+            System.out.println("Invalid pack size, ensure it is 8 * number of players");
             return false;
         }
-
-        Set<Integer> set = new HashSet<Integer>(packList);
-        if(set.size() < nPlayers) {
-            return false;
-        }
-        for(int i : set) {
-            if(Collections.frequency(packList, i) < 4) {
-                return false;
-            }
-            if(i < 0) {
-                return false;
-            }
-        }
-
         return true;
     }
 
@@ -85,7 +80,7 @@ public class CardGame {
 
     protected static void createDeck() {
         for(int i=0; i<nPlayers; i++) {
-            Deck deck = new Deck(i);
+            Deck deck = new Deck(i + 1);
             deckList.add(deck);
         }
     }
@@ -93,18 +88,18 @@ public class CardGame {
     protected static void createPlayers() {
         for (int i = 0; i < nPlayers; i++) {
             if (i + 1 == nPlayers) {
-                Player player = new Player(deckList.get(i), deckList.get(0), i);
+                Player player = new Player(deckList.get(i), deckList.getFirst(), i + 1);
                 players.add(player);
                 break;
             }
-            Player player = new Player(deckList.get(i), deckList.get(i + 1), i);
+            Player player = new Player(deckList.get(i), deckList.get(i + 1), i + 1);
             players.add(player);
         }
     }
 
     protected static void dealCards() {
         for(int i=0; i<players.size(); i++) {
-            for(int j=i; j<(4*nPlayers)+i; j+=nPlayers) {
+            for(int j=i; j<(4*nPlayers); j+=nPlayers) {
                 players.get(i).addToHand(pack.get(j));
             }
             Logger.logInitial(players.get(i), players.get(i).readHand());
@@ -113,14 +108,6 @@ public class CardGame {
             for(int j=i+4*nPlayers; j<8*nPlayers; j+=nPlayers) {
                 deckList.get(i).addToDeck(pack.get(j));
             }
-        }
-    }
-
-    protected static void setPreferred() {
-        Set<Integer> uniquesCreator = new HashSet<Integer>(packList);
-        ArrayList<Integer> uniquesOrdered = new ArrayList<Integer>(uniquesCreator);
-        for(int i=0; i<nPlayers; i++) {
-            players.get(i).setDenomination(uniquesOrdered.get(i));
         }
     }
 
@@ -153,7 +140,7 @@ public class CardGame {
     }
 
     protected static void removeLogs() {
-        File currentDirectory = new File(System.getProperty("user.dir"));
+        File currentDirectory = new File(System.getProperty("user.dir") + File.separator + "logs");
         File[] logFiles = getLogFiles(currentDirectory);
         for (File logFile : logFiles) {
             logFile.delete();
@@ -161,7 +148,7 @@ public class CardGame {
     }
 
     protected static File[] getLogFiles(File directory) {
-        return directory.listFiles((dir, filename) -> filename.endsWith(".txt"));
+        return directory.listFiles((_, filename) -> filename.endsWith(".txt"));
     }
 
     public static void main(String[] args) {
@@ -179,7 +166,6 @@ public class CardGame {
         createDeck();
         createPlayers();
         dealCards();
-        setPreferred();
         startThreads();
 
     }

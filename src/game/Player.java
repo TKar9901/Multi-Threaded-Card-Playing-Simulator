@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Player {
     Deck drawDeck;
@@ -15,11 +13,8 @@ public class Player {
         drawDeck = draw;
         discardDeck = discard;
         name = id;
-        createPlayerLog();
-    }
-
-    public void setDenomination(int denomination) {
-        this.denomination = denomination;
+        denomination = id;
+        playerLog = Logger.createPlayerLog(this);
     }
 
     public int[] readHand() {
@@ -36,11 +31,6 @@ public class Player {
 
     public void removeFromHand(Card c) {
         this.hand.remove(c);
-    }
-
-    public void createPlayerLog() {
-        String fs = String.format("player%d_output.txt", this.name);
-        this.playerLog = new File(fs);
     }
 
 }

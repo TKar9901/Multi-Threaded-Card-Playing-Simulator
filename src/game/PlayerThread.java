@@ -2,7 +2,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerThread extends Thread {
 
-    private Player player;
+    private final Player player;
     private Boolean won = false;
 
     public PlayerThread(Player player) {
@@ -25,7 +25,7 @@ public class PlayerThread extends Thread {
             }
             
         } catch(InterruptedException e) {
-            
+
         }
         
     }
@@ -33,6 +33,7 @@ public class PlayerThread extends Thread {
     private void drawCard() {
         Card drawnCard = player.drawDeck.drawFromDeck();
         player.addToHand(drawnCard);
+        //updatePreference(drawnCard);
         int[] args = {drawnCard.getValue(), player.drawDeck.name};
         Logger.logDraw(player, args);
     }
@@ -40,15 +41,26 @@ public class PlayerThread extends Thread {
     private void discardCard() {
         Card discardedCard = player.hand.get(getRandomIndex());
         player.removeFromHand(discardedCard);
+        player.discardDeck.addToDeck(discardedCard);
         int[] args = {discardedCard.getValue(), player.discardDeck.name};
         Logger.logDiscard(player, args);
-        player.discardDeck.addToDeck(discardedCard);
     }
 
     private void readCurrentHand() {
         int[] args = player.readHand();
         Logger.logCurrent(player, args);
     }
+
+    /*
+    private void updatePreference(Card c) {
+        ArrayList<Integer> cardValues = new ArrayList();
+        for(Card card : player.hand) {
+            cardValues.add(card.getValue());
+        }
+        if(Collections.frequency(cardValues, c.getValue()) == 3) {
+            player.setDenomination(c.getValue());
+        }
+    } */
 
     private int getRandomIndex() {
         ThreadLocalRandom rand = ThreadLocalRandom.current();

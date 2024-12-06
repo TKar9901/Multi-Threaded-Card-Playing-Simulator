@@ -51,12 +51,6 @@ public class CardGameTest {
         return method;
     }
 
-    private Method getSetPreferred() throws NoSuchMethodException {
-        Method method = CardGame.class.getDeclaredMethod("setPreferred");
-        method.setAccessible(true);
-        return method;
-    }
-
     private Method getStartThreads() throws NoSuchMethodException {
         Method method = CardGame.class.getDeclaredMethod("startThreads");
         method.setAccessible(true);
@@ -66,12 +60,6 @@ public class CardGameTest {
 
     private Method getCloseThreads() throws NoSuchMethodException {
         Method method = CardGame.class.getDeclaredMethod("closeThreads");
-        method.setAccessible(true);
-        return method;
-    }
-
-    private Method getGetNumberOfPlayers() throws NoSuchMethodException {
-        Method method = CardGame.class.getDeclaredMethod("getNumberOfPlayers");
         method.setAccessible(true);
         return method;
     }
@@ -88,20 +76,6 @@ public class CardGameTest {
         game.setPackList(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 43, 33, 35, 3443, 3344, 3, 433, 44)));
         assertFalse((Boolean)(packValidity.invoke(null)));
 
-        game.setPlayers(17);
-        game.setPackList(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)));
-        assertFalse((Boolean)(packValidity.invoke(null)));
-
-        game.setPlayers(2);
-        game.setPackList(new ArrayList<>(Arrays.asList(1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)));
-        assertFalse((Boolean)(packValidity.invoke(null)));
-
-        game.setPlayers(2);
-        game.setPackList(new ArrayList<>(Arrays.asList(1, 1, 1, -2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)));
-        assertFalse((Boolean)(packValidity.invoke(null)));
-
-        game.setPackList(new ArrayList<>(Arrays.asList(1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)));
-        assertTrue((Boolean)(packValidity.invoke(null)));
     }
 
     //Tests to see if the pack of card objects is the expected size
@@ -143,11 +117,12 @@ public class CardGameTest {
             if(i != 4) {
                 assertEquals(game.getDeckList().get(i+1), game.getPlayers().get(i).discardDeck);
             } else {
-                assertEquals(game.getDeckList().get(0), game.getPlayers().get(i).discardDeck);
+                assertEquals(game.getDeckList().getFirst(), game.getPlayers().get(i).discardDeck);
             }
         }
     }
 
+    //Tests the cards are deal in a round-robin format
     @Test
     public void dealCardsTest() throws Exception {
         Method dealCards = getDealCards();
@@ -155,39 +130,21 @@ public class CardGameTest {
         Method createDecks = getCreateDeck();
         Method createPlayers = getCreatePlayers();
         game.setPlayers(2);
-        game.setPackList(new ArrayList<>(Arrays.asList(1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)));
+        game.setPackList(new ArrayList<>(Arrays.asList(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2)));
         createCards.invoke(null);
         createDecks.invoke(null);
         createPlayers.invoke(null);
         dealCards.invoke(null);
 
-        //Check that the players receive the expected hands and that the decks have the expected cards
-        int[] expectedHand = {1,1,2,2};
-        assertArrayEquals(expectedHand, game.getPlayers().get(0).readHand());
-        assertArrayEquals(expectedHand, game.getPlayers().get(1).readHand());
+        //Check that the players receive the expected hands
+        int[] expectedResultOne = {1,1,1,1};
+        int[] expectedResultTwo = {2,2,2,2};
+        assertArrayEquals(expectedResultOne, game.getPlayers().getFirst().readHand());
+        assertArrayEquals(expectedResultTwo, game.getPlayers().getLast().readHand());
 
         //Check that the two decks are as expected
-        int[] expectedDeck = {2,2,2,2};
-        assertArrayEquals(expectedDeck, game.getDeckList().get(0).readDeck());
-        assertArrayEquals(expectedDeck, game.getDeckList().get(1).readDeck());
-    }
-
-    @Test
-    public void setPreferredTest() throws Exception {
-        Method setPreferred = getSetPreferred();
-        Method createCards = getCreateCards();
-        Method createDecks = getCreateDeck();
-        Method createPlayers = getCreatePlayers();
-        game.setPlayers(2);
-        game.setPackList(new ArrayList<>(Arrays.asList(4, 4, 4, 4, 5, 5, 5, 5, 7, 7, 7, 7, 2, 2, 2, 2)));
-        createCards.invoke(null);
-        createDecks.invoke(null);
-        createPlayers.invoke(null);
-        setPreferred.invoke(null);
-
-        //Test that the preference is being correctly determined and assigned (the lowest value two uniques)
-        assertEquals(2, game.getPlayers().get(0).denomination);
-        assertEquals(4, game.getPlayers().get(1).denomination);
+        assertArrayEquals(expectedResultOne, game.getDeckList().getFirst().readDeck());
+        assertArrayEquals(expectedResultTwo, game.getDeckList().getLast().readDeck());
     }
 
     //Tests that the threads start correctly
@@ -195,7 +152,6 @@ public class CardGameTest {
     public void startThreadsTest() throws Exception {
         Method startThreads = getStartThreads();
         Method dealCards = getDealCards();
-        Method setPreferred = getSetPreferred();
         Method createCards = getCreateCards();
         Method createDecks = getCreateDeck();
         Method createPlayers = getCreatePlayers();
@@ -204,11 +160,10 @@ public class CardGameTest {
         createCards.invoke(null);
         createDecks.invoke(null);
         createPlayers.invoke(null);
-        setPreferred.invoke(null);
         dealCards.invoke(null);
         startThreads.invoke(null);
-        assertEquals(true, game.getPlayerThreads().get(0).isAlive());
-        assertEquals(true, game.getPlayerThreads().get(1).isAlive());
+        assertTrue(game.getPlayerThreads().get(0).isAlive());
+        assertTrue(game.getPlayerThreads().get(1).isAlive());
     }
 
     //Test that the threads close correctly
@@ -217,21 +172,19 @@ public class CardGameTest {
         Method closeThreads = getCloseThreads();
         Method startThreads = getStartThreads();
         Method dealCards = getDealCards();
-        Method setPreferred = getSetPreferred();
         Method createCards = getCreateCards();
         Method createDecks = getCreateDeck();
         Method createPlayers = getCreatePlayers();
         game.setPlayers(2);
-        game.setPackList(new ArrayList<>(Arrays.asList(4, 4, 4, 4, 5, 5, 5, 5, 7, 7, 7, 7, 2, 2, 2, 2)));
+        game.setPackList(new ArrayList<>(Arrays.asList(4, 2, 5, 7, 4, 2, 5, 7, 4, 2, 5, 7, 4, 2, 5, 7)));
         createCards.invoke(null);
         createDecks.invoke(null);
         createPlayers.invoke(null);
-        setPreferred.invoke(null);
         dealCards.invoke(null);
         startThreads.invoke(null);
         closeThreads.invoke(null);
-        assertEquals(true, game.getPlayerThreads().get(0).isInterrupted());
-        assertEquals(true, game.getPlayerThreads().get(1).isInterrupted());
+        assertTrue(game.getPlayerThreads().get(0).isInterrupted());
+        assertTrue(game.getPlayerThreads().get(1).isInterrupted());
     }
    
 }

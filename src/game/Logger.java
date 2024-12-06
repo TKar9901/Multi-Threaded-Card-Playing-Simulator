@@ -3,12 +3,24 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Logger {
+    private static final String path = System.getProperty("user.dir") + File.separator + "logs"
+            + File.separator;
+
+    public static File createPlayerLog(Player player) {
+        String fs = path + String.format("player%d_output.txt", player.name);
+        return new File(fs);
+    }
+
+    public static File createDeckLog(Deck deck) {
+        String fs = path + String.format("deck%d_output.txt", deck.name);
+        return new File(fs);
+    }
+
     public static void logDraw(Player player, int[] args) {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d draws a %d from deck %d\n",
                     player.name, args[0], args[1]);
-            System.out.println(fs);
             writer.write(fs);
             writer.close();
         } catch(IOException e) {
@@ -22,7 +34,6 @@ public class Logger {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d discards %d to deck %d\n",
                     player.name, args[0], args[1]);
-            System.out.println(fs);
             writer.write(fs);
             writer.close();
         } catch(IOException e) {
@@ -35,7 +46,6 @@ public class Logger {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d current hand: %d %d %d %d\n",
                     player.name, args[0], args[1], args[2], args[3]);
-            System.out.println(fs);
             writer.write(fs);
             writer.close();
         } catch(IOException e) {
@@ -48,7 +58,6 @@ public class Logger {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d initial hand: %d %d %d %d\n",
                     player.name, args[0], args[1], args[2], args[3]);
-            System.out.println(fs);
             writer.write(fs);
             writer.close();
         } catch(IOException e) {
@@ -61,7 +70,6 @@ public class Logger {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d final hand: %d %d %d %d\n",
                     player.name, args[0], args[1], args[2], args[3]);
-            System.out.println(fs);
             writer.write(fs);
             writer.close();
         } catch(IOException e) {
@@ -85,7 +93,6 @@ public class Logger {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d exits\n", player.name);
-            System.out.println(fs);
             writer.write(fs);
             writer.close();
         } catch(IOException e) {
@@ -98,7 +105,6 @@ public class Logger {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d has informed player %d that player %d has won\n",
                     args[0], player.name, args[0]);
-            System.out.println(fs);
             writer.write(fs);
             writer.close();
         } catch(IOException e) {

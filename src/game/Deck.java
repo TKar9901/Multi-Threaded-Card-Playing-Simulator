@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.io.File;
+import java.util.Collections;
 
 public class Deck {
     ArrayList<Card> cards = new ArrayList<>();
@@ -8,24 +9,17 @@ public class Deck {
 
     public Deck(int id) {
         name = id;
-        createDeckLog();
-    }
-
-    private void createDeckLog() {
-        String fs = String.format("deck%d_output.txt", this.name);
-        this.deckLog = new File(fs);
+        deckLog = Logger.createDeckLog(this);
     }
 
     public synchronized Card drawFromDeck() {
-        return this.cards.getFirst();
+        Card c = this.cards.getFirst();
+        this.cards.remove(c);
+        return c;
     }
 
     public synchronized void addToDeck(Card c) {
         this.cards.add(c);
-    }
-
-    public ArrayList<Card> getCards() {
-        return this.cards;
     }
 
     public int[] readDeck() {
