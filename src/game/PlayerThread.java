@@ -34,7 +34,6 @@ public class PlayerThread extends Thread {
     protected void drawCard() {
         Card drawnCard = player.drawDeck.drawFromDeck();
         player.addToHand(drawnCard);
-        //updatePreference(drawnCard);
         int[] args = {drawnCard.getValue(), player.drawDeck.name};
         Logger.logDraw(player, args);
     }

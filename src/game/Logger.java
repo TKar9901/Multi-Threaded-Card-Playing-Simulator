@@ -7,8 +7,15 @@ public class Logger {
             + File.separator;
 
     public static File createPlayerLog(Player player) {
+
         String fs = path + String.format("player%d_output.txt", player.name);
-        return new File(fs);
+        File playerLog = new File(fs);
+        try {
+            playerLog.createNewFile();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return playerLog;
     }
 
     public static File createDeckLog(Deck deck) {
@@ -16,7 +23,7 @@ public class Logger {
         return new File(fs);
     }
 
-    public static void logDraw(Player player, int[] args) {
+    public static synchronized void logDraw(Player player, int[] args) {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d draws a %d from deck %d\n",
@@ -29,7 +36,7 @@ public class Logger {
 
     }
 
-    public static void logDiscard(Player player, int[] args) {
+    public static synchronized void logDiscard(Player player, int[] args) {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d discards a %d to deck %d\n",
@@ -41,7 +48,7 @@ public class Logger {
         }
     }
 
-    public static void logCurrent(Player player, int[] args){
+    public static synchronized void logCurrent(Player player, int[] args){
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d current hand: %d %d %d %d\n",
@@ -77,7 +84,7 @@ public class Logger {
         }
     }
 
-    public static void logWin(Player player) {
+    public static synchronized void logWin(Player player) {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
             String fs = String.format("player %d wins\n", player.name);

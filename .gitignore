@@ -401,3 +401,4 @@ FodyWeavers.xsd
 
 # Output files
 ./src/game/*output.txt!/logs/
+!/.idea/

@@ -1,16 +1,10 @@
 import java.io.File;
 
 public class MockPlayer extends Player {
-    File testLog;
 
     public MockPlayer(Deck draw, Deck discard, int id) {
         super(draw, discard, id);
     }
-
-    public void createTestLog(String testName) {
-        testLog = MockLogger.createTestPlayerLog(testName, this);
-    }
-
 
     public void setHand() {
         this.hand.clear();
