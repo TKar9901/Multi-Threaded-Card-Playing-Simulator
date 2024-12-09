@@ -8,9 +8,9 @@ public class MockCardGame extends CardGame{
     public void setPackList(ArrayList<Integer> n) {
         CardGame.packList = n;
     }
-    public void setPlayerThreads() {
-        playerThreads.add(new PlayerThread(players.get(0)));
-        playerThreads.add(new PlayerThread(players.get(1)));
+
+    public int getNPlayers() {
+        return nPlayers;
     }
 
     public ArrayList<Integer> getPackList() {

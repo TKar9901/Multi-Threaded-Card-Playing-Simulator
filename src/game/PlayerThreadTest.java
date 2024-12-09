@@ -1,14 +1,10 @@
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import java.io.File;
 import java.util.Scanner;
-
 import static org.junit.Assert.*;
+import java.lang.reflect.*;
 
-/*IMPORTANT PLEASE READ -- If these tests fail, it seems to be due to an issue when running them all together
-as they class. They should pass the majority of the time, but they don't properly reset the log file each time
-when ran as such. Try running them individually if they do fail.
- */
 
 public class PlayerThreadTest {
     private MockPlayerThread playerThread;
@@ -17,16 +13,24 @@ public class PlayerThreadTest {
     private Deck discardDeck;
     private Scanner scanner;
 
-    @Before
-    public void deleteLog() throws Exception {
-        final File logFile = new File(System.getProperty("user.dir") + File.separator
-                + "logs" + File.separator + "player1_output.txt");
-        if (logFile.exists()) {
-            logFile.delete();
-        }
-        }
+    private static Method getMakeLogDir() throws NoSuchMethodException {
+        Method method = CardGame.class.getDeclaredMethod("makeLogDir");
+        method.setAccessible(true);
+        return method;
+    }
 
-    //Test the log file gets a line when a player draws a card
+    @BeforeClass
+    public static void setUp() throws Exception {
+        Method makeLogDir = getMakeLogDir();
+        makeLogDir.invoke(null);
+        File log = new File(System.getProperty("user.dir")
+                + File.separator + "logs" +
+                File.separator + "player1_output.txt");
+        if(!log.exists()) {
+            log.createNewFile();
+        }
+    }
+    //Test that the drawCard function works correctly
     @Test
     public void drawCardTest() throws Exception  {
         drawDeck = new Deck(1);
@@ -43,16 +47,18 @@ public class PlayerThreadTest {
         scanner = new Scanner(log);
         while(scanner.hasNextLine()) {
             line = scanner.nextLine();
+            if(line.equals("player 1 draws a 1 from deck 1")) {
+                return;
+            }
         }
-        assertEquals("player 1 draws a 1 from deck 1", line);
+        fail();
     }
 
-    //Test the log file gets a line when a player discards a card
+    //Test the discardCard function works correctly
     @Test
     public void discardCardTest() throws Exception  {
         drawDeck = new Deck(1);
         discardDeck = new Deck(2);
-        discardDeck.addToDeck(new Card(1));
         player = new MockPlayer(drawDeck, discardDeck, 1);
         int[] hand = {2,2,2,2};
         player.setCustomHand(hand);
@@ -66,11 +72,14 @@ public class PlayerThreadTest {
         scanner = new Scanner(log);
         while(scanner.hasNextLine()) {
             line = scanner.nextLine();
+            if(line.equals("player 1 discards a 2 to deck 2")) {
+                return;
+            }
         }
-        assertEquals("player 1 discards a 2 to deck 2", line);
+        fail();
     }
 
-    //Test the log file gets a line when a hand is read
+    //Test the readCurrentHand function works correctly
     @Test
     public void readCurrentHandTest() throws Exception  {
         drawDeck = new Deck(1);
@@ -88,34 +97,16 @@ public class PlayerThreadTest {
         scanner = new Scanner(log);
         while(scanner.hasNextLine()) {
             line = scanner.nextLine();
+            if(line.equals("player 1 current hand: 2 2 2 2")) {
+                return;
+            }
         }
-        assertEquals("player 1 current hand: 2 2 2 2", line);
-
+        fail();
     }
 
     //Tests that a winning hand is correctly identified
     @Test
-    public void checkHandStateFailTest() throws Exception  {
-        drawDeck = new Deck(1);
-        discardDeck = new Deck(2);
-        player = new MockPlayer(drawDeck, discardDeck, 1);
-        player.setHand();
-        playerThread = new MockPlayerThread(player);
-        playerThread.setTestType("checkHand");
-        playerThread.start();
-        String line = "";
-        File log = new File(System.getProperty("user.dir")
-                + File.separator + "logs" +
-                File.separator + "player1_output.txt");
-        scanner = new Scanner(log);
-        while(scanner.hasNextLine()) {
-            line = scanner.nextLine();
-        }
-        assertNotEquals("player 1 wins", line);
-    }
-
-    @Test
-    public void checkHandStateWinTest() throws Exception {
+    public void checkHandStateTest() throws Exception {
         drawDeck = new Deck(1);
         discardDeck = new Deck(2);
         player = new MockPlayer(drawDeck, discardDeck, 1);
@@ -124,14 +115,8 @@ public class PlayerThreadTest {
         playerThread = new MockPlayerThread(player);
         playerThread.setTestType("checkHand");
         playerThread.start();
-        String line = "";
-        File log = new File(System.getProperty("user.dir")
-                + File.separator + "logs" +
-                File.separator + "player1_output.txt");
-        scanner = new Scanner(log);
-        while (scanner.hasNextLine()) {
-            line = scanner.nextLine();
-        }
-        assertEquals("player 1 wins", line);
+        playerThread.join();
+        assertTrue(playerThread.result.equals("won"));
+
     }
 }

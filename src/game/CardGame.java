@@ -32,7 +32,7 @@ public class CardGame {
         }
     }
 
-    protected static void loadPack(Scanner userInput) throws InvalidFormatException {
+    protected static void loadPack(Scanner userInput) {
         makeLogDir();
         while (true) {
             System.out.println("Please enter pack file name");
@@ -46,12 +46,13 @@ public class CardGame {
                     try {
                         packList.add(Integer.parseInt(data));
                     } catch (NumberFormatException e) {
-                        throw new InvalidFormatException("Pack format invalid, please fix and run again");
+                        System.out.println("Invalid card value, please fix and run again");
+                        System.exit(0);
                     }
                 }
                 packScanner.close();
                 if (!packValidity()) {
-                    throw new InvalidFormatException("Pack format invalid, please fix and run again");
+                    System.exit(0);
                 } else {
                     break;
                 }
@@ -98,16 +99,21 @@ public class CardGame {
     }
 
     protected static void dealCards() {
-        for(int i=0; i<players.size(); i++) {
-            for(int j=i; j<(4*nPlayers); j+=nPlayers) {
-                players.get(i).addToHand(pack.get(j));
-            }
+        // Dealing the first 4 * nPlayers cards to players in a round-robin fashion
+        for (int i = 0; i < 4 * nPlayers; i++) {
+            int playerIndex = i % nPlayers; // Determine which player receives this card
+            players.get(playerIndex).addToHand(pack.get(i));
+        }
+
+        // Logging the hands of all players after dealing
+        for (int i = 0; i < nPlayers; i++) {
             Logger.logInitial(players.get(i), players.get(i).readHand());
         }
-        for(int i=0; i<deckList.size(); i++){
-            for(int j=i+4*nPlayers; j<8*nPlayers; j+=nPlayers) {
-                deckList.get(i).addToDeck(pack.get(j));
-            }
+
+        // Dealing the remaining 4 * nPlayers cards to decks in a round-robin fashion
+        for (int i = 4 * nPlayers; i < 8 * nPlayers; i++) {
+            int deckIndex = (i - 4 * nPlayers) % deckList.size(); // Determine which deck receives this card
+            deckList.get(deckIndex).addToDeck(pack.get(i));
         }
     }
 
@@ -154,11 +160,7 @@ public class CardGame {
     public static void main(String[] args) {
 
         getNumberOfPlayers(new Scanner(System.in));
-        try {
-            loadPack(new Scanner(System.in));
-        } catch(InvalidFormatException e) {
-            System.out.println(e.getMessage());
-        }
+        loadPack(new Scanner(System.in));
 
         removeLogs();
         packValidity();

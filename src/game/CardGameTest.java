@@ -1,8 +1,11 @@
 import org.junit.Test;
+import java.io.File;
 import java.lang.reflect.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.Scanner;
+import java.io.ByteArrayInputStream;
 import org.junit.Before;
 import org.junit.After;
 
@@ -19,6 +22,23 @@ public class CardGameTest {
     @After
     public void tearDown() throws Exception {
         MockCardGame.resetStaticState();
+    }
+
+    private void provideInput(String input) {
+        ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
+        System.setIn(testIn);
+    }
+
+    private void deleteDir(File file) {
+        File[] contents = file.listFiles();
+        if (contents != null) {
+            for (File f : contents) {
+                if (! Files.isSymbolicLink(f.toPath())) {
+                    deleteDir(f);
+                }
+            }
+        }
+        file.delete();
     }
 
     private Method getPackValidity() throws NoSuchMethodException {
@@ -60,6 +80,30 @@ public class CardGameTest {
 
     private Method getCloseThreads() throws NoSuchMethodException {
         Method method = CardGame.class.getDeclaredMethod("closeThreads");
+        method.setAccessible(true);
+        return method;
+    }
+
+    private Method getGetNumberOfPlayers() throws NoSuchMethodException {
+        Method method = CardGame.class.getDeclaredMethod("getNumberOfPlayers", Scanner.class);
+        method.setAccessible(true);
+        return method;
+    }
+
+    private Method getMakeLogDir() throws NoSuchMethodException {
+        Method method = CardGame.class.getDeclaredMethod("makeLogDir");
+        method.setAccessible(true);
+        return method;
+    }
+
+    private Method getRemoveLogs() throws NoSuchMethodException {
+        Method method = CardGame.class.getDeclaredMethod("removeLogs");
+        method.setAccessible(true);
+        return method;
+    }
+
+    private Method getLoadPack() throws NoSuchMethodException {
+        Method method = CardGame.class.getDeclaredMethod("loadPack", Scanner.class);
         method.setAccessible(true);
         return method;
     }
@@ -122,7 +166,7 @@ public class CardGameTest {
         }
     }
 
-    //Tests the cards are deal in a round-robin format
+    //Tests the cards are dealt in a round-robin format
     @Test
     public void dealCardsTest() throws Exception {
         Method dealCards = getDealCards();
@@ -186,5 +230,53 @@ public class CardGameTest {
         assertTrue(game.getPlayerThreads().get(0).isInterrupted());
         assertTrue(game.getPlayerThreads().get(1).isInterrupted());
     }
-   
+
+    //Tests the correct number of players is set with a simulated input
+    @Test
+    public void getNumberOfPlayersTest() throws Exception {
+        Method getNumberOfPlayers = getGetNumberOfPlayers();
+        provideInput("2");
+        Scanner s = new Scanner(System.in);
+        getNumberOfPlayers.invoke(null, s);
+        assertEquals(2, game.getNPlayers());
+    }
+
+    //Tests that the log directory is correctly made if not present and then tests that it will be correctly deleted
+    @Test
+    public void makeLogDirTest() throws Exception {
+        Method makeLogDir = getMakeLogDir();
+        Method removeLogs = getRemoveLogs();
+        deleteDir(new File(System.getProperty("user.dir") + File.separator + "logs"));
+        File logDir = new File(System.getProperty("user.dir") + File.separator + "logs");
+        makeLogDir.invoke(null);
+        assertTrue(logDir.exists());
+
+    }
+
+    //Tests that the log files will be correctly deleted each time the game is run
+    @Test
+    public void removeLogsTest() throws Exception {
+        Method removeLogs = getRemoveLogs();
+        deleteDir(new File(System.getProperty("user.dir") + File.separator + "logs"));
+        File logDir = new File(System.getProperty("user.dir") + File.separator + "logs");
+        logDir.mkdir();
+        File logFile = new File(System.getProperty("user.dir") + File.separator + "logs" + File.separator + "log.txt");
+        logFile.createNewFile();
+        removeLogs.invoke(null);
+        assertFalse(logFile.exists());
+    }
+
+    //Tests that packs are correctly loaded (assuming they have the correct format)
+    @Test
+    public void loadPackTest() throws Exception {
+        Method loadPack = getLoadPack();
+        game.setPlayers(2);
+        provideInput("testpack");
+        Scanner s = new Scanner(System.in);
+        loadPack.invoke(null, s);
+        Integer[] expectedPack = {1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4};
+        ArrayList<Integer> expectedPackList = new ArrayList<Integer>(Arrays.asList(expectedPack));
+        assertEquals(expectedPackList, game.getPackList());
+    }
+
 }

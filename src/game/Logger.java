@@ -123,9 +123,23 @@ public class Logger {
         try {
             int[] args = deck.readDeck();
             FileWriter writer = new FileWriter(deck.deckLog, true);
-            String fs = String.format("deck%d contents: %d %d %d %d",
-                    deck.name, args[0], args[1], args[2], args[3]);
-            writer.write(fs);
+            if(args.length == 4) {
+                String fs = String.format("deck%d contents: %d %d %d %d",
+                        deck.name, args[0], args[1], args[2], args[3]);
+                writer.write(fs);
+            } else if(args.length == 3){
+                String fs = String.format("deck%d contents: %d %d, %d",
+                        deck.name, args[0], args[1], args[2]);
+                writer.write(fs);
+            } else if(args.length == 2) {
+                String fs = String.format("deck%d contents: %d, %d",
+                        deck.name, args[0], args[1]);
+            } else {
+                String fs = String.format("deck%d contents: %d",
+                        deck.name, args[0]);
+                writer.write(fs);
+            }
+
             writer.close();
         } catch(IOException e) {
             System.out.println(e.getMessage());

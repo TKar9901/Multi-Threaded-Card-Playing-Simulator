@@ -1,5 +1,6 @@
 public class MockPlayerThread extends PlayerThread {
     private String testType;
+    public String result;
 
     public MockPlayerThread(Player player) {
         super(player);
@@ -23,11 +24,12 @@ public class MockPlayerThread extends PlayerThread {
                 break;
             case "checkHand":
                 if(checkHandState()) {
+                    result = "won";
                     Logger.logWin(player);
                 } else {
+                    result = "lost";
                     Logger.logExit(player);
                 }
-
                 break;
         }
 
