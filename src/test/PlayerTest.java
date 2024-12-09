@@ -1,7 +1,4 @@
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import java.lang.reflect.Method;
 import static org.junit.Assert.*;
 
 public class PlayerTest {
@@ -9,17 +6,6 @@ public class PlayerTest {
     private Deck drawDeck;
     private Deck discardDeck;
 
-    private static Method getMakeLogDir() throws NoSuchMethodException {
-        Method method = CardGame.class.getDeclaredMethod("makeLogDir");
-        method.setAccessible(true);
-        return method;
-    }
-
-    @BeforeClass
-    public static void setUp() throws Exception {
-        Method makeLogDir = getMakeLogDir();
-        makeLogDir.invoke(null);
-    }
     //Tests that a hand is read correctly
     @Test
     public void readHandTest() {

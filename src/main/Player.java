@@ -17,6 +17,7 @@ public class Player {
         playerLog = Logger.createPlayerLog(this);
     }
 
+    //Returns the value of each card in a player's hand as an array
     public int[] readHand() {
         int[] handAsArray = new int[this.hand.size()];
         for(int i=0; i<this.hand.size(); i++) {
@@ -25,10 +26,12 @@ public class Player {
         return handAsArray;
     }
 
+    //Adds a card to a player's hand
     public void addToHand(Card c) {
         this.hand.add(c);
     }
 
+    //Removes a card from a player's hand
     public void removeFromHand(Card c) {
         this.hand.remove(c);
     }

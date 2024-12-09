@@ -7,28 +7,25 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.io.ByteArrayInputStream;
 import org.junit.Before;
-import org.junit.After;
 
 import static org.junit.Assert.*;
 
 public class CardGameTest {
     MockCardGame game = new MockCardGame();
 
+    //Ensures that the game is set to defaults each time a test is ran
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         MockCardGame.resetStaticState();
     }
 
-    @After
-    public void tearDown() throws Exception {
-        MockCardGame.resetStaticState();
-    }
-
+    //Function to emulate user input to test methods that need it
     private void provideInput(String input) {
         ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
         System.setIn(testIn);
     }
 
+    //Function to clear the log directory if there are files inside
     private void deleteDir(File file) {
         File[] contents = file.listFiles();
         if (contents != null) {
@@ -41,6 +38,7 @@ public class CardGameTest {
         file.delete();
     }
 
+    //Reflection methods to retrieve the various functions of CardGame
     private Method getPackValidity() throws NoSuchMethodException {
         Method method = CardGame.class.getDeclaredMethod("packValidity");
         method.setAccessible(true);
@@ -245,7 +243,6 @@ public class CardGameTest {
     @Test
     public void makeLogDirTest() throws Exception {
         Method makeLogDir = getMakeLogDir();
-        Method removeLogs = getRemoveLogs();
         deleteDir(new File(System.getProperty("user.dir") + File.separator + "logs"));
         File logDir = new File(System.getProperty("user.dir") + File.separator + "logs");
         makeLogDir.invoke(null);
@@ -275,7 +272,7 @@ public class CardGameTest {
         Scanner s = new Scanner(System.in);
         loadPack.invoke(null, s);
         Integer[] expectedPack = {1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4};
-        ArrayList<Integer> expectedPackList = new ArrayList<Integer>(Arrays.asList(expectedPack));
+        ArrayList<Integer> expectedPackList = new ArrayList<>(Arrays.asList(expectedPack));
         assertEquals(expectedPackList, game.getPackList());
     }
 

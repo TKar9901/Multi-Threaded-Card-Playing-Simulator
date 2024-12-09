@@ -11,14 +11,15 @@ public class PlayerThreadTest {
     private MockPlayer player;
     private Deck drawDeck;
     private Deck discardDeck;
-    private Scanner scanner;
 
+    //Gets the makeLogDir method from CardGame using reflection
     private static Method getMakeLogDir() throws NoSuchMethodException {
         Method method = CardGame.class.getDeclaredMethod("makeLogDir");
         method.setAccessible(true);
         return method;
     }
 
+    //Creates a log file for the tests to use
     @BeforeClass
     public static void setUp() throws Exception {
         Method makeLogDir = getMakeLogDir();
@@ -40,18 +41,9 @@ public class PlayerThreadTest {
         playerThread = new MockPlayerThread(player);
         playerThread.setTestType("drawCard");
         playerThread.start();
-        String line = "";
-        File log = new File(System.getProperty("user.dir")
-                + File.separator + "logs" +
-                File.separator + "player1_output.txt");
-        scanner = new Scanner(log);
-        while(scanner.hasNextLine()) {
-            line = scanner.nextLine();
-            if(line.equals("player 1 draws a 1 from deck 1")) {
-                return;
-            }
-        }
-        fail();
+        playerThread.join();
+        int val = player.hand.getLast().getValue();
+        assertEquals(1, val);
     }
 
     //Test the discardCard function works correctly
@@ -81,11 +73,11 @@ public class PlayerThreadTest {
         playerThread = new MockPlayerThread(player);
         playerThread.setTestType("currentHand");
         playerThread.start();
-        String line = "";
+        String line;
         File log = new File(System.getProperty("user.dir")
                 + File.separator + "logs" +
                 File.separator + "player1_output.txt");
-        scanner = new Scanner(log);
+        Scanner scanner = new Scanner(log);
         while(scanner.hasNextLine()) {
             line = scanner.nextLine();
             if(line.equals("player 1 current hand: 2 2 2 2")) {
@@ -108,6 +100,5 @@ public class PlayerThreadTest {
         playerThread.start();
         playerThread.join();
         assertTrue(playerThread.result.equals("won"));
-
     }
 }

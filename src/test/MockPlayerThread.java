@@ -10,6 +10,7 @@ public class MockPlayerThread extends PlayerThread {
         this.testType = testType;
     }
 
+    //A way to test each function in PlayerThread one at a time
     @Override
     public void run() {
         switch (testType) {

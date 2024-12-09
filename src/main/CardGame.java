@@ -10,6 +10,7 @@ public class CardGame {
     protected static ArrayList<Card> pack = new ArrayList<>();
     protected static ArrayList<Deck> deckList = new ArrayList<>();
 
+    //Returns the number of players for the game based on the user's input
     protected static void getNumberOfPlayers(Scanner userInput) {
         while (true) {
             System.out.println("Number of players");
@@ -25,6 +26,7 @@ public class CardGame {
         }
     }
 
+    //If one does not already exist, makes the logging directory
     protected static void makeLogDir() {
         File logDir = new File(System.getProperty("user.dir") + File.separator + "logs");
         if (!logDir.exists()) {
@@ -32,14 +34,14 @@ public class CardGame {
         }
     }
 
+    //Attempts to load a pack based on its name (without the .txt), won't accept packs with an incorrect format or characters
     protected static void loadPack(Scanner userInput) {
         makeLogDir();
         while (true) {
             System.out.println("Please enter pack file name");
             try {
                 String packName = userInput.nextLine();
-                File packFile = new File(System.getProperty("user.dir") + File.separator + "src"
-                        + File.separator + "main" + File.separator + packName + ".txt");
+                File packFile = new File(System.getProperty("user.dir") + File.separator + packName + ".txt");
                 Scanner packScanner = new Scanner(packFile);
                 while (packScanner.hasNextLine()) {
                     String data = packScanner.nextLine();
@@ -54,6 +56,7 @@ public class CardGame {
                 if (!packValidity()) {
                     System.exit(0);
                 } else {
+                    System.out.println("Pack loaded successfully");
                     break;
                 }
             } catch (FileNotFoundException e) {
@@ -62,9 +65,8 @@ public class CardGame {
         }
     }
 
+    //Checks that the pack is the correct size
     protected static boolean packValidity() {
-
-        //Checks the correct number of cards in the pack
         if(packList.size() != 8 * nPlayers) {
             System.out.println("Invalid pack size, ensure it is 8 * number of players");
             return false;
@@ -72,6 +74,7 @@ public class CardGame {
         return true;
     }
 
+    //Converts the values from the pack into Card objects
     protected static void createCards() {
         for(int i : packList) {
             Card card = new Card(i);
@@ -79,6 +82,7 @@ public class CardGame {
         }
     }
 
+    //Creates the deck objects based on the number of players
     protected static void createDeck() {
         for(int i=0; i<nPlayers; i++) {
             Deck deck = new Deck(i + 1);
@@ -86,6 +90,7 @@ public class CardGame {
         }
     }
 
+    //Creates the player objects based on the number of players, assigns them a draw and discard deck
     protected static void createPlayers() {
         for (int i = 0; i < nPlayers; i++) {
             if (i + 1 == nPlayers) {
@@ -98,6 +103,8 @@ public class CardGame {
         }
     }
 
+    /*Deals cards in a round-robin fashion to all players, logs their inital hand
+    and then deals the remaining cards in a round-robin fashion to the decks */
     protected static void dealCards() {
         // Dealing the first 4 * nPlayers cards to players in a round-robin fashion
         for (int i = 0; i < 4 * nPlayers; i++) {
@@ -117,6 +124,7 @@ public class CardGame {
         }
     }
 
+    //Creates and starts each playerThread
     protected static void startThreads() {
         for(Player player : players) {
             PlayerThread thread = new PlayerThread(player);
@@ -125,12 +133,14 @@ public class CardGame {
         }
     }
 
+    //Stops all threads from running once the game has a winner
     protected static void closeThreads() {
         for(PlayerThread thread : playerThreads) {
             thread.interrupt();
         }
     }
 
+    //Executes the final 3 log lines for the winner and other players
     protected static void finalLogs(Player winner) {
         for(Player player : players) {
             if(player==winner) {
@@ -145,6 +155,7 @@ public class CardGame {
         }
     }
 
+    //Removes logs from previous games if they exist
     protected static void removeLogs() {
         File currentDirectory = new File(System.getProperty("user.dir") + File.separator + "logs");
         File[] logFiles = getLogFiles(currentDirectory);
@@ -153,15 +164,15 @@ public class CardGame {
         }
     }
 
+    //Retrieves logs from previous games if they exist
     protected static File[] getLogFiles(File directory) {
         return directory.listFiles((_, filename) -> filename.endsWith(".txt"));
     }
 
+    //Initalizes all game information
     public static void main(String[] args) {
-
         getNumberOfPlayers(new Scanner(System.in));
         loadPack(new Scanner(System.in));
-
         removeLogs();
         packValidity();
         createCards();
@@ -169,6 +180,5 @@ public class CardGame {
         createPlayers();
         dealCards();
         startThreads();
-
     }
 }

@@ -6,8 +6,8 @@ public class Logger {
     protected static final String path = System.getProperty("user.dir") + File.separator + "logs"
             + File.separator;
 
+    //Creates a log file for a player
     public static File createPlayerLog(Player player) {
-
         String fs = path + String.format("player%d_output.txt", player.name);
         File playerLog = new File(fs);
         try {
@@ -18,11 +18,13 @@ public class Logger {
         return playerLog;
     }
 
+    //Creates a log file for a deck
     public static File createDeckLog(Deck deck) {
         String fs = path + String.format("deck%d_output.txt", deck.name);
         return new File(fs);
     }
 
+    //Logs which card a player draws from their draw deck
     public static synchronized void logDraw(Player player, int[] args) {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
@@ -33,9 +35,9 @@ public class Logger {
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
-
     }
 
+    //Logs which card player discards to their discard deck
     public static synchronized void logDiscard(Player player, int[] args) {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
@@ -48,6 +50,7 @@ public class Logger {
         }
     }
 
+    //Logs the players current hand after performing a draw and discard
     public static synchronized void logCurrent(Player player, int[] args){
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
@@ -60,6 +63,7 @@ public class Logger {
         }
     }
 
+    //Logs the players starting hand
     public static void logInitial(Player player, int[] args){
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
@@ -72,6 +76,7 @@ public class Logger {
         }
     }
 
+    //Logs the players final hand after they or another player has won
     public static void logFinal(Player player, int[] args){
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
@@ -84,6 +89,7 @@ public class Logger {
         }
     }
 
+    //Logs that the player has won the game (also sends this message to the terminal)
     public static synchronized void logWin(Player player) {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
@@ -96,6 +102,7 @@ public class Logger {
         }
     }
 
+    //Logs that a player has exited the game
     public static void logExit(Player player) {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
@@ -107,6 +114,7 @@ public class Logger {
         }
     }
 
+    //Logs that a player has been informed by the victor that the victor has won the game
     public static void logInformed(Player player, int[] args) {
         try {
             FileWriter writer = new FileWriter(player.playerLog, true);
@@ -119,6 +127,8 @@ public class Logger {
         }
     }
 
+    /*Logs the final state of a deck, a deck will have a maximum of 7 cards and a minimum of 1 at the end
+    based on the speed of each playerThread*/
     public static void logDeck(Deck deck) {
         try {
             int[] args = deck.readDeck();
@@ -146,6 +156,7 @@ public class Logger {
             } else if (args.length == 2) {
                 String fs = String.format("deck%d contents: %d, %d",
                         deck.name, args[0], args[1]);
+                writer.write(fs);
             } else {
                 String fs = String.format("deck%d contents: %d",
                         deck.name, args[0]);
