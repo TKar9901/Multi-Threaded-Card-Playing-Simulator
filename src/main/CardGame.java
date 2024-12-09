@@ -39,7 +39,7 @@ public class CardGame {
             try {
                 String packName = userInput.nextLine();
                 File packFile = new File(System.getProperty("user.dir") + File.separator + "src"
-                        + File.separator + "game" + File.separator + packName + ".txt");
+                        + File.separator + "main" + File.separator + packName + ".txt");
                 Scanner packScanner = new Scanner(packFile);
                 while (packScanner.hasNextLine()) {
                     String data = packScanner.nextLine();
