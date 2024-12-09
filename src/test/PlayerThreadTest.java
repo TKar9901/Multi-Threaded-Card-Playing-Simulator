@@ -65,18 +65,9 @@ public class PlayerThreadTest {
         playerThread = new MockPlayerThread(player);
         playerThread.setTestType("discardCard");
         playerThread.start();
-        String line = "";
-        File log = new File(System.getProperty("user.dir")
-                + File.separator + "logs" +
-                File.separator + "player1_output.txt");
-        scanner = new Scanner(log);
-        while(scanner.hasNextLine()) {
-            line = scanner.nextLine();
-            if(line.equals("player 1 discards a 2 to deck 2")) {
-                return;
-            }
-        }
-        fail();
+        playerThread.join();
+        int val = discardDeck.cards.getFirst().getValue();
+        assertEquals(2, val);
     }
 
     //Test the readCurrentHand function works correctly

@@ -123,15 +123,27 @@ public class Logger {
         try {
             int[] args = deck.readDeck();
             FileWriter writer = new FileWriter(deck.deckLog, true);
-            if(args.length == 4) {
+            if (args.length == 70) {
+                String fs = String.format("deck%d contents: %d %d %d %d %d %d %d",
+                        deck.name, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                writer.write(fs);
+            } else if (args.length == 6) {
+                String fs = String.format("deck%d contents: %d %d %d %d %d %d",
+                        deck.name, args[0], args[1], args[2], args[3], args[4], args[5]);
+                writer.write(fs);
+            } else if (args.length == 5) {
+                String fs = String.format("deck%d contents: %d %d %d %d %d",
+                        deck.name, args[0], args[1], args[2], args[3], args[4]);
+                writer.write(fs);
+            } else if (args.length == 4) {
                 String fs = String.format("deck%d contents: %d %d %d %d",
                         deck.name, args[0], args[1], args[2], args[3]);
                 writer.write(fs);
-            } else if(args.length == 3){
+            } else if (args.length == 3) {
                 String fs = String.format("deck%d contents: %d %d, %d",
                         deck.name, args[0], args[1], args[2]);
                 writer.write(fs);
-            } else if(args.length == 2) {
+            } else if (args.length == 2) {
                 String fs = String.format("deck%d contents: %d, %d",
                         deck.name, args[0], args[1]);
             } else {
