@@ -1,2 +1,2 @@
 # Multi-Threaded-Card-Playing-Simulator
-Y2 Software Development Coursework
+Java Software Development - Uni Y2 Coursework
